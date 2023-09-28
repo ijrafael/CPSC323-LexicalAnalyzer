@@ -3,7 +3,7 @@ class Lexer():
         self._operators = ['+', '-', '*', '**', '/', '//', '%', '=', '+=', '-=', '/=', '*=', '%=', '//=', '**=', '==', '!=', '>', '>=', '<', '<=', 'and', 'or', 'not', 'in', 'not in']
         self._keywords = ['as', 'assert', 'break', 'class', 'continue', 'def', 'del', 'elif', 'else', 'except', 'False', 'for', 'from', 'if', 'import', 'None', 'pass', 'raise', 'return', 'True', 'try', 'while', 'with']
         self._separators = [',', ';', ':', '(', ')', '{', '}', '[', ']']
-        self._comments = ['#', '//', '"""""""', "''''''"]
+        self._comments = ['#', '//', ]
         self._string = ['"', "'"]
 
         self.list_2 = []
