@@ -8,16 +8,20 @@ string = ['"', "'"]
 class Lexer():
     def __init__(self):
         self.list = []
-        #this opens up the file and separates the lines into a list
+        self.file = []
+       
+    def open_file(self):
         try:
             with open("input_scode.txt") as f:
-                self._file = f.readlines()
-                #print(self._file)          #output is: ['while (t < upper) s = 22.00;\n', '\n', 'def test_case(n = 1):\n', '    return n - 2']
+                self.file = f.readlines()
+                print(self.file)          #output is: ['while (t < upper) s = 22.00;\n', '\n', 'def test_case(n = 1):\n', '    return n - 2']
         except FileNotFoundError:
             print("File not found, ensure input_scode.txt is in directory")
+
             
     def run(self):
-        for line in self._file:
+        self.open_file()
+        for line in self.file:
             # loop through the line
             self.char_iter = 0
             while self.char_iter < len(line):
@@ -43,27 +47,25 @@ class Lexer():
                     self.list.append('separator')
                     self.list.append(line[self.char_iter])
                     self.char_iter += 1
-                elif self.test_if_int(line=line): # see if it's an integer
+                elif self.test_if_constant(line=line): # see if it's an integer
                     self.list.append('constant')
-                    self.list.append(str(self.integer))
+                    self.list.append(str(self.constant))
                 elif single_char in separators:
                     self.list.append('separator')
                     self.list.append(single_char)
                     self.char_iter += 1
                 elif single_char in operators or single_char == 'a' or single_char == 'o' or single_char == 'i' or single_char == 'n': # +, -, *, /, =, ...
                     operator = single_char
-                    # handle 2 character operators (i.e +=)
-                    temp_operator = single_char + line[self.char_iter + 1]
-                    if temp_operator in operators:
-                        self.char_iter += 2
-                        operator = temp_operator
+                    two_op = single_char + line[self.char_iter + 1]
+                    three_op = single_char + line[self.char_iter + 1] + line[self.char_iter + 2]
 
-                    # handle 3 character operators (i.e //=)
-                    temp_operator = single_char + line[self.char_iter + 1] + line[self.char_iter + 2]
-                    if temp_operator in operators:
+                    if three_op in operators:
                         self.char_iter += 3
-                        operator = temp_operator
-
+                        operator = three_op
+                    elif two_op in operators:
+                        self.char_iter += 2
+                        operator = two_op
+                    
                     # handle 'word operators' (i.e and, or) 
                     if single_char == 'a' or single_char == 'n': # 'and' & 'not'
                         temp_operator = single_char + line[self.char_iter + 1] + line[self.char_iter + 2]
@@ -76,16 +78,22 @@ class Lexer():
                             self.char_iter += 2
                             operator = temp_operator
 
+                    if operator == single_char: # all other if/else failed
+                        self.char_iter += 1
+
                     self.list.append('operator')
                     self.list.append(operator)
                 else:
                     temp_string = single_char
                     self.char_iter += 1
                     s_char = line[self.char_iter]
-                    while s_char not in separators and s_char not in operators and s_char not in comments and s_char != ' ' and s_char != '\n':
-                        temp_string += s_char
-                        self.char_iter += 1
-                        s_char = line[self.char_iter]
+                    if s_char == ' ':
+                        pass
+                    else:
+                        while s_char not in separators and s_char not in operators and s_char not in comments and s_char != ' ' and s_char != '\n':
+                            temp_string += s_char
+                            self.char_iter += 1
+                            s_char = line[self.char_iter]
                     
                     if temp_string in keywords:
                         self.list.append('keyword')
@@ -94,10 +102,12 @@ class Lexer():
                     self.list.append(temp_string)
 
         # Print the list of tokens and lexemes
-        print('Tokens               Lexemes')
+        print('Tokens          Lexemes')
         i = 0
         while i < (len(self.list) - 1):
             j = i + 1
+            if len(self.list[i]) == 10:
+                print(f'{self.list[i]}      {self.list[j]}')
             if len(self.list[i]) == 9:
                 print(f'{self.list[i]}       {self.list[j]}')
             elif len(self.list[i]) == 8:
@@ -106,9 +116,11 @@ class Lexer():
                 print(f'{self.list[i]}         {self.list[j]}')
             elif len(self.list[i]) == 6:
                 print(f'{self.list[i]}          {self.list[j]}')
+            i += 2
 
-    def test_if_int(self, line):
+    def test_if_constant(self, line):
         num_iter = self.char_iter
+        iter = 0
         possible_list = []
         while num_iter < len(line):
             if line[num_iter] in operators or line[num_iter] in separators:
@@ -118,20 +130,25 @@ class Lexer():
             else:
                 possible_list.append(line[num_iter])
             num_iter += 1
+            iter += 1
         
         if len(possible_list) == 0:
             return False
         
         j = 0
-        integer_str = ''
+        constant_str = ''
         while j < len(possible_list):
-            temp_num = ord(possible_list[j])
-            if temp_num > 9:
-                return False
-            integer_str += possible_list[j]
+            temp = possible_list[j]
+            if temp == '.':
+                constant_str += temp
+            else:
+                temp_num = ord(possible_list[j]) - 48
+                if temp_num > 9:
+                    return False
+                constant_str += possible_list[j]
             j += 1
-        self.integer = int(integer_str)
-        self.char_iter += num_iter
+        self.constant = float(constant_str)
+        self.char_iter += iter
         return True
                     
 
