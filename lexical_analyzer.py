@@ -17,7 +17,6 @@ class Lexer():
                 print(self.file)          #output is: ['while (t < upper) s = 22.00;\n', '\n', 'def test_case(n = 1):\n', '    return n - 2']
         except FileNotFoundError:
             print("File not found, ensure input_scode.txt is in directory")
-
             
     def run(self):
         self.open_file()
@@ -137,8 +136,6 @@ class Lexer():
             i += 2
         output.close()
 
-        
-
     def test_if_constant(self, line):
         num_iter = self.char_iter
         iter = 0
@@ -172,7 +169,6 @@ class Lexer():
         self.char_iter += iter
         return True
                     
-
 def main():
     L = Lexer()
     L.run()
