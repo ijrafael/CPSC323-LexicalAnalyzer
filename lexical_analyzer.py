@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 # Anne Edwards, Irvin Rafael, Joshua Villareal
 operators = ['+', '-', '*', '**', '/', '//', '%', '=', '+=', '-=', '/=', '*=', '%=', '//=', '**=', '==', '!=', '>', '>=', '<', '<=', 'and', 'or', 'not', 'in']
 keywords = ['as', 'assert', 'break', 'class', 'continue', 'def', 'del', 'elif', 'else', 'except', 'False', 'for', 'from', 'if', 'import', 'None', 'pass', 'raise', 'return', 'True', 'try', 'while', 'with']
@@ -183,4 +181,3 @@ def main():
 
 if __name__ == '__main__':
     main()
->>>>>>> Stashed changes
