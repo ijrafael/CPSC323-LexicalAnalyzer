@@ -1,0 +1,11 @@
+Tokens          Lexemes
+keyword         while
+separator       (
+identifier      t
+operator        <
+identifier      upper
+separator       )
+identifier      s
+operator        =
+constant        22.0
+separator       ;
