@@ -7,5 +7,5 @@ identifier      upper
 separator       )
 identifier      s
 operator        =
-constant        22.0
+constant        22.00
 separator       ;

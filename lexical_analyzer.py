@@ -218,8 +218,7 @@ def lexer():
     print_to_file(list)
                 
 def main():
-    L = Lexer()
-    L.run()
+    lexer()
 
 if __name__ == '__main__':
     main()
